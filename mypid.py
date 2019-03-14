@@ -53,7 +53,7 @@ class mypid():
         elif output > self.Omax:
             output = self.Omax
         return(output/100 * self.Win)
-
+    #setters
     def setKc(self,Kacie):
         self.Kc=Kacie
 
