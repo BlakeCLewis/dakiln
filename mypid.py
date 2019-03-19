@@ -65,8 +65,10 @@ class mypid():
 
             print(str(Cterm) +'+'+ str(Pterm) +
                  '+'+ str(self.Iterm) +'+'+ str(Dterm) +'='+ str(op))
-         
-            return(self.output/100 * self.tau)
+        else
+            print(str(self.output)) 
+
+        return(self.output/100 * self.tau)
 
     #setters
     def auto(Cpv, Cex):
