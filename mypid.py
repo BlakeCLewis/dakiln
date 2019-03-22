@@ -41,11 +41,11 @@ class mypid():
     def pid(self, Csp, Cpv, Cex):
 
         if self._auto:
-            er = Csp-Cpv
+            er = Csp - Cpv
          
             #steady state loss (inside C - outide C) * _Kc
             # heat loss is proportional to temp differitial
-            Cterm = self._Kc * (Cpv-Cex)
+            Cterm = self._Kc * (Cpv - Cex)
          
             # P time desired change
             # to enable change in tau without blowing chunks
