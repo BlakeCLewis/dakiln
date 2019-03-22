@@ -1,11 +1,13 @@
 class mypid():
-    def __init__(self,Cpv,kc=6.0,kp=2.5,ki=0.5,kd=12.5,
-                      win=30,imin=-20,imax=20,omin=0,omax=100):
+    def __init__(self,
+            Cpv,kc=6.0,kp=2.5,ki=0.5,kd=12.5,
+            win=30,imin=-20,imax=20,omin=0,omax=100
+    ):
 
         #time period in seconds
         self._tau = win
 
-        # to minimize math in the pid loop scale the constants
+        # to minimize math in the pid loop, do it now
 
         #Kc is the required output to maintain temp per 100C
         self._Kc = kc / 100
@@ -22,7 +24,7 @@ class mypid():
         self._Iterm = 0
 
         #output limit (_Omin <= output <= _Omax)
-        #% of window, (0,100)
+        # % of window, (0,100)
         self._Omin = omin
         self._Omax = omax
 
@@ -38,7 +40,7 @@ class mypid():
 
     def pid(self, Csp, Cpv, Cex):
 
-        if self.auto :
+        if self._auto:
             er = Csp-Cpv
          
             #steady state loss (inside C - outide C) * _Kc
@@ -58,13 +60,13 @@ class mypid():
                 self._Iterm = self._Imax
          
             #(delta error rate) * _Kd
-            Dterm = self._Kd * (er - _laster)
+            Dterm = self._Kd * (er - self._laster)
             self._laster = er
          
             op = (Cterm + Pterm + self._Iterm + Dterm)
          
-            if op < _Omin:
-                op = _Omin
+            if op < self._Omin:
+                op = self._Omin
             elif op > self._Omax:
                 op = self._Omax
 
@@ -87,14 +89,14 @@ class mypid():
         """
         self._Iterm = self._output - (self._Kc * (Cpv - Cex))
         self._laster = 0
-        self.auto=True
+        self._auto=True
 
     def manual(op):
         """"pause pid calculation
             set output = op
         """
         self._output = op
-        self.auto = False
+        self._auto = False
 
     def set_Kc(self, Kacie):
         self._Kc = Kacie / 100
