@@ -1,0 +1,49 @@
+independent variables:
+  ks = set|triggered
+  room_temp = thermocouple_1
+  kiln_temp = thermocouple_0
+
+  ks_temp = temp when ks(triggered)
+
+kiln
+  initial
+     ks=false | profile=null =>idle
+     ks=true  & profile=active => run
+
+  idle
+     ks=true && profile=active
+
+  run
+     next_stage = climb
+     next_stage = hold
+     next_stage = rel_hold
+     next_stage = cool
+     next_stage = rel_cool
+     next_stage = cool
+
+  climb
+     temp >= target | KS = false -> run
+
+  peak_hold
+     minutes >= hold_minutes -> run
+
+  rel_hold
+     minutes >= hold_minutes -> run
+
+  rel_cool
+     temp=target_temp -> run
+
+  cool
+     temp=target_temp -> run
+
+
+a profile
+ # type       target        rate     minutes
+-- ---------- ------------- -------- -------
+ 1 climb:     97c,          177c/hr
+ 2 hold:      102c,          60c/hr, 180min
+ 3 climb:     945c,         177c/hr
+ 4 climb:     1201c,         60c/hr,
+ 5 rel_hold:  peak_temp,     60c/hr, 15min
+ 7 rel_cool:  peak_temp-56, 350c/hr
+ 6 rel_hold:  current_temp,          30min
