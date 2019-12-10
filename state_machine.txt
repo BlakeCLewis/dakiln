@@ -1,3 +1,6 @@
+option to not user KS
+
+
 independent variables:
   ks = set|triggered
   room_temp = thermocouple_1
@@ -23,9 +26,7 @@ kiln
 
   climb
      temp >= target | KS = false -> run
-
-  peak_hold
-     minutes >= hold_minutes -> run
+     loop pid until above conditions
 
   rel_hold
      minutes >= hold_minutes -> run

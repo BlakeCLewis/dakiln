@@ -34,33 +34,22 @@ class kilnsitter(pin=27):
        return state
 
 class thermocouple(pins):
-    def __int__(MAX31856): #inherits ?
-        self.CS[] = pins
-        self.Tx = MAX31856(hardware_spi=SPI.SpiDev(0,0))
-        for cs in self.CS:
-            GPIO.setup(cs, GPIO.OUT)
-            GPIO.output(cs, GPIO.LOW)
-        self.temp[] = self.read()
-        self.internal[]
-        #hardware spi w/ software chip select
+    def __int__(MAX31856):
+        self.T0 = MAX31856(hardware_spi=SPI.SpiDev(0,0))
+        self.T1 = MAX31856(hardware_spi=SPI.SpiDev(0,1))
+        self.temp[] = readit()
+        self.internal[] = readint()
 
     def readtc():
-        cnt = 0
         for cs in self.CS:
-            GPIO.output(cs, GPIO.HIGH) #is HIGH select?
-            self.temp[cnt] = self.Tx.read_temp_c()
-            GPIO.output(cs, GPIO.LOW)
+            self.temp[] = self.T0.read_temp_c(),self.T1.read_temp_c()
             print('T'+str(i)+': {0:0.3F}*C'.format(self.temp[cnt]))
-            ++cnt 
         return  
 
     def readint():
-        cnt = 0
         for cs in self.CS:
-            GPIO.output(cs, GPIO.HIGH) #is HIGH select?
             internal[] = self.Tx.read_internal_temp_c()
-            GPIO.output(cs, GPIO.LOW)
             print('Ti'+str(i)+': {0:0.3F}*C'.format(internal[cnt]))
-            ++cnt 
         return
-       #need shed temp reading
+
+
