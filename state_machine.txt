@@ -6,36 +6,40 @@ independent variables:
   room_temp = thermocouple_1
   kiln_temp = thermocouple_0
 
-  ks_temp = temp when ks(triggered)
+  ks_temp == temp   #temp when ks_triggered()
 
 kiln
   initial
-     ks=false | profile=null =>idle
-     ks=true  & profile=active => run
+     ks == false | profile == null -> idle
+     ks == true  & profile == active -> run
 
   idle
-     ks=true && profile=active
+     ks == true & profile == active -> run
 
-  run
-     next_stage = climb
-     next_stage = hold
-     next_stage = rel_hold
-     next_stage = cool
-     next_stage = rel_cool
-     next_stage = cool
+  run (retieves active profile and determines next_stage)
+     next_stage -> climb
+         
+     next_stage -> hold
+     next_stage -> rel_hold
+     next_stage -> cool
+     next_stage -> rel_cool
+     next_stage -> cool
 
   climb
-     temp >= target | KS = false -> run
-     loop pid until above conditions
+     loop pid()
+     temp >= target | KS == false -> run
 
   rel_hold
+     loop pid()
      minutes >= hold_minutes -> run
 
   rel_cool
-     temp=target_temp -> run
+     loop pid()
+     temp == target_temp -> run
 
   cool
-     temp=target_temp -> run
+     loop pid()
+     temp == target_temp -> run
 
 
 a profile
@@ -48,3 +52,7 @@ a profile
  5 rel_hold:  peak_temp,     60c/hr, 15min
  7 rel_cool:  peak_temp-56, 350c/hr
  6 rel_hold:  current_temp,          30min
+
+
+
+target reached when within a few degrees not % of target
